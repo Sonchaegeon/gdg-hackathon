@@ -1,5 +1,5 @@
 import { Gift } from 'src/shared/entity/gift/gift.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('shop')
 export class Shop {
@@ -9,6 +9,6 @@ export class Shop {
   @Column({ length: 150 })
   name: string;
 
-  @OneToOne(() => Gift, (gift) => gift.shop)
-  gift: Gift;
+  @OneToMany(() => Gift, (gift) => gift.shop)
+  gift: Gift[];
 }

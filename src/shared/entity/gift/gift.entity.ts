@@ -26,7 +26,7 @@ export class Gift {
   @OneToMany(() => GiftImage, (giftImage) => giftImage.gift_id)
   gift_image: string;
 
-  @OneToOne(() => Shop, (shop) => shop.gift)
+  @ManyToOne(() => Shop, (shop) => shop.gift)
   @JoinColumn({ name: 'shop_id' })
   shop: number;
 
