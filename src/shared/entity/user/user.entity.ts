@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from '../../../post/entity/post.entity';
+import { Gift } from '../../../shared/entity/gift/gift.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -13,4 +15,10 @@ export class User {
 
   @Column({ length: 30 })
   name: string;
+
+  @OneToMany(() => Gift, (gift) => gift.user)
+  gift: Gift[];
+
+  @OneToMany(() => Post, (post) => post.user)
+  post: Post[];
 }
