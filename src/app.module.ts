@@ -8,6 +8,8 @@ import { HttpErrorFilter } from './shared/exception/exception.filter';
 import { PostModule } from './post/post.module';
 import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
 import { ApplicantModule } from './applicant/applicant.module';
+import { AuthService } from './auth/auth.service';
+import { UserRepository } from './shared/entity/user/user.repository';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ApplicantModule } from './applicant/applicant.module';
   providers: [
     EventsGateway,
     JwtStrategy,
+    AuthService,
+    UserRepository,
     {
       provide: APP_FILTER,
       useClass: HttpErrorFilter,
