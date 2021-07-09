@@ -7,6 +7,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpErrorFilter } from './shared/exception/exception.filter';
 import { PostModule } from './post/post.module';
 import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
+import { ApplicantModule } from './applicant/applicant.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
     AuthModule,
     JwtModule.register({}),
     PostModule,
+    ApplicantModule,
   ],
   providers: [
     EventsGateway,
