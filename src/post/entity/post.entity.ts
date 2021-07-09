@@ -14,12 +14,6 @@ export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  exp_date: Date;
-
-  @Column({ type: 'int' })
-  price: number;
-
   @ManyToOne(() => User, (user) => user.post)
   @JoinColumn({ name: 'user_id' })
   user: number;

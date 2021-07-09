@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { GiftImage } from './gift-image.entity';
+import { Genre } from '../genre/genre.entity';
 
 @Entity('gift')
 export class Gift {
@@ -23,8 +24,11 @@ export class Gift {
   @Column({ type: 'int' })
   price: number;
 
-  @OneToMany(() => GiftImage, (giftImage) => giftImage.gift_id)
-  gift_image: string;
+  @Column()
+  exp_date: Date;
+
+  @OneToOne(() => GiftImage, (giftImage) => giftImage.gift_id)
+  gift_image: number;
 
   @ManyToOne(() => Shop, (shop) => shop.gift)
   @JoinColumn({ name: 'shop_id' })
@@ -36,4 +40,8 @@ export class Gift {
 
   @OneToOne(() => Post, (post) => post.gift)
   post: Post;
+
+  @OneToOne(() => Genre, (genre) => genre.gift)
+  @JoinColumn({ name: 'genre_id' })
+  genre: Genre;
 }
