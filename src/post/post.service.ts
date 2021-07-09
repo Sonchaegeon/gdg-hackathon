@@ -8,10 +8,12 @@ import { UserRepository } from '../shared/entity/user/user.repository';
 import {
   ExistPostException,
   GiftNotFoundException,
+  QueryInputException,
   UserNotFoundException,
 } from '../shared/exception/exception.index';
 import { IUserRequest } from '../shared/interface/request.interface';
 import { CreatePostDto, CreatePostResponseData } from './dto/create-post.dto';
+import { GetPostsResponseData } from './dto/get-posts.dto';
 import { Post } from './entity/post.entity';
 import { PostRepository } from './entity/post.repository';
 
@@ -34,5 +36,13 @@ export class PostService {
     const postRecord = await this.postRepository.findOne({ gift: dto.gift_id });
     if (postRecord) throw ExistPostException;
     return await this.postRepository.createPost(dto, userRecord.id);
+  }
+
+  public async getPosts(
+    page: number,
+    size: number,
+  ): Promise<GetPostsResponseData[]> {
+    if (page <= 0 || size <= 0) throw QueryInputException;
+    return this.postRepository.getPosts(page, size);
   }
 }
