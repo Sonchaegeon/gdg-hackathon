@@ -7,6 +7,7 @@ import { IUserRequest } from '../shared/interface/request.interface';
 import { GoogleLoginResponseData } from './dto/google-login.dto';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../shared/jwt/jwt.constant';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService {
@@ -25,6 +26,13 @@ export class AuthService {
     const refresh_token = this.generateToken(this.req.user.email, 'refresh');
 
     return { access_token, refresh_token };
+  }
+
+  public async verifyUser(token: string): Promise<User> {
+    const decoded = jwt.verify(token, JWT_SECRET_KEY) as { email: string };
+    const userRecord = this.userRepository.findUserByEmail(decoded.email);
+    if (!userRecord) throw new WsException('User Not Found!!');
+    return userRecord;
   }
 
   private generateToken(email: string, type: string): string {
