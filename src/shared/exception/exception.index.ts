@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,6 +13,11 @@ export const QueryInputException = new BadRequestException('Query Input Error');
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException();
 export const ExpiredTokenException = new UnauthorizedException('Token Expired');
+
+// 403
+export const ApplicantForbiddenException = new ForbiddenException(
+  'You cannot applicant to your post',
+);
 
 // 404
 export const UserNotFoundException = new NotFoundException('User Not Found');

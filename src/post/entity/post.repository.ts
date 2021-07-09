@@ -28,6 +28,7 @@ export class PostRepository extends Repository<Post> {
       .innerJoin('gift.gift_image', 'gift_image')
       .innerJoin('gift.genre', 'genre')
       .select('shop.name', 'shop_name')
+      .addSelect('post.id', 'post_id')
       .addSelect('gift.name', 'gift_name')
       .addSelect('gift_image.cover_url', 'gift_image')
       .addSelect('gift.exp_date', 'exp_date')

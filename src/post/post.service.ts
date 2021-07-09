@@ -38,10 +38,7 @@ export class PostService {
     return await this.postRepository.createPost(dto, userRecord.id);
   }
 
-  public async getPosts(
-    page: number,
-    size: number,
-  ): Promise<GetPostsResponseData[]> {
+  public getPosts(page: number, size: number): Promise<GetPostsResponseData[]> {
     if (page <= 0 || size <= 0) throw QueryInputException;
     return this.postRepository.getPosts(page, size);
   }
