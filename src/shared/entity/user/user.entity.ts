@@ -1,6 +1,7 @@
 import { Post } from '../../../post/entity/post.entity';
 import { Gift } from '../../../shared/entity/gift/gift.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Applicant } from 'src/applicant/entity/applicant.entity';
 
 @Entity('user')
 export class User {
@@ -21,4 +22,7 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   post: Post[];
+
+  @OneToMany(() => Applicant, (applicant) => applicant.user_id)
+  applicant: Applicant[];
 }
