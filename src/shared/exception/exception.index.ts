@@ -25,3 +25,4 @@ export const GiftNotFoundException = new NotFoundException('Gift Not Found');
 export const ApplicantNotFoundException = new NotFoundException(
   'Applicant Not Found',
 );
+export const PostNotFoundException = new NotFoundException('Post Not Found');
