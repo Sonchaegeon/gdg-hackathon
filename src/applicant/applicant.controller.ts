@@ -21,4 +21,10 @@ export class ApplicantController {
   public async getApplicants(): Promise<GetApplicantResponseData[]> {
     return await this.applicantService.getApplicants();
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('post')
+  public async getPostApplicants(): Promise<GetApplicantResponseData[]> {
+    return await this.applicantService.getPostApplicants();
+  }
 }

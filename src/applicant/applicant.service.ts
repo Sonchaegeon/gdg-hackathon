@@ -51,4 +51,12 @@ export class ApplicantService {
     if (applicantRecords.length === 0) throw ApplicantNotFoundException;
     return applicantRecords;
   }
+
+  public async getPostApplicants(): Promise<GetApplicantResponseData[]> {
+    const applicantRecords = await this.postViewRepository.getPostApplicants(
+      this.req.user.email,
+    );
+    if (applicantRecords.length === 0) throw ApplicantNotFoundException;
+    return applicantRecords;
+  }
 }
