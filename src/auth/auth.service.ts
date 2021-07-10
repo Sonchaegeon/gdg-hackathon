@@ -8,6 +8,7 @@ import { GoogleLoginResponseData } from './dto/google-login.dto';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../shared/jwt/jwt.constant';
 import { WsException } from '@nestjs/websockets';
+import { getManager } from 'typeorm';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService {
@@ -29,8 +30,16 @@ export class AuthService {
   }
 
   public async verifyUser(token: string): Promise<User> {
-    const decoded = jwt.verify(token, JWT_SECRET_KEY) as { email: string };
-    const userRecord = this.userRepository.findUserByEmail(decoded.email);
+    const entityManager = getManager();
+    const splitToken = token.split(' ');
+    if (splitToken[0] !== 'Bearer')
+      throw new WsException('Must be Bearer token');
+    const decoded = jwt.verify(splitToken[1], JWT_SECRET_KEY) as {
+      email: string;
+    };
+    const userRecord = await entityManager.findOne(User, {
+      email: decoded.email,
+    });
     if (!userRecord) throw new WsException('User Not Found!!');
     return userRecord;
   }

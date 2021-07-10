@@ -9,5 +9,6 @@ import { GoogleStrategy } from './strategy/google.strategy';
   imports: [TypeOrmModule.forFeature([UserRepository])],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
