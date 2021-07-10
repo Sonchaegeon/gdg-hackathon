@@ -11,6 +11,8 @@ import {
 import { Server } from 'socket.io';
 import { Applicant } from 'src/applicant/entity/applicant.entity';
 import { ApplicantRepository } from 'src/applicant/entity/applicant.repository';
+import { Post } from 'src/post/entity/post.entity';
+import { PostRepository } from 'src/post/entity/post.repository';
 import { Gift } from 'src/shared/entity/gift/gift.entity';
 import { GiftRepository } from 'src/shared/entity/gift/gift.repository';
 import { User } from 'src/shared/entity/user/user.entity';
@@ -23,6 +25,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @InjectRepository(User) private readonly userRepository: UserRepository,
     @InjectRepository(Gift) private readonly giftRepository: GiftRepository,
+    @InjectRepository(Post) private readonly postRepository: PostRepository,
     @InjectRepository(Applicant)
     private readonly applicantRepository: ApplicantRepository,
   ) {}
@@ -39,8 +42,14 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('requestAccept')
   requestAccept(client: SocketType): void {
-    this.msgLogger.log(`${client.email}: request Accept`);
+    this.msgLogger.log(`${client.email}: request accept`);
     client.broadcast.to(client.currentRoom).emit('requestAccept');
+  }
+
+  @SubscribeMessage('requestLeaveRoom')
+  requestLeaveRoom(client: SocketType): void {
+    this.msgLogger.log(`${client.email}: request leave room`);
+    client.broadcast.to(client.currentRoom).emit('requestLeaveRoom');
   }
 
   @SubscribeMessage('accept')
@@ -50,6 +59,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       post_id: client.post_id,
       user_id,
     });
+    await this.postRepository.delete(client.post_id);
     this.server.sockets.in(client.currentRoom).emit('accept');
     client.leave(client.currentRoom);
   }
@@ -75,7 +85,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       user: user.id,
     });
     if (!gift) throw new WsException('Gift Not Found');
-    else this.server.sockets.in(client.currentRoom).emit('addGift', gift);
+    else client.broadcast.to(client.currentRoom).emit('addGift', gift);
   }
 
   @UseGuards(WsJwtGuard)

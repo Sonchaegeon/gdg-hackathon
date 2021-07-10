@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApplicantRepository } from 'src/applicant/entity/applicant.repository';
 import { AuthModule } from 'src/auth/auth.module';
+import { PostRepository } from 'src/post/entity/post.repository';
 import { GiftRepository } from 'src/shared/entity/gift/gift.repository';
 import { UserRepository } from 'src/shared/entity/user/user.repository';
 import { EventsGateway } from './events.gateway';
@@ -12,6 +13,7 @@ import { EventsGateway } from './events.gateway';
     TypeOrmModule.forFeature([
       UserRepository,
       GiftRepository,
+      PostRepository,
       ApplicantRepository,
     ]),
   ],
