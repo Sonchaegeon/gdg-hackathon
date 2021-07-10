@@ -90,11 +90,16 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage('joinRoomBuyer')
-  async joinRoomBuyer(client: SocketType, room: string): Promise<void> {
+  async joinRoomBuyer(
+    client: SocketType,
+    room: string,
+    post_id: number,
+  ): Promise<void> {
     const user = await this.userRepository.findUserByEmail(client.email);
     client.join(room);
     client.currentRoom = room;
     client.is_accept = 0;
+    client.post_id = post_id;
     client.broadcast.to(room).emit('joinComplete', user);
     this.logger.log(`${client.email} buyer joined room: ${room}`);
   }
