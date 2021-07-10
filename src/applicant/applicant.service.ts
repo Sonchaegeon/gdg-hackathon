@@ -9,6 +9,7 @@ import { ApplicantRepository } from './entity/applicant.repository';
 import {
   ApplicantForbiddenException,
   ApplicantNotFoundException,
+  PostNotFoundException,
   UserNotFoundException,
 } from '../shared/exception/exception.index';
 import { v4 } from 'uuid';
@@ -58,5 +59,29 @@ export class ApplicantService {
     );
     if (applicantRecords.length === 0) throw ApplicantNotFoundException;
     return applicantRecords;
+  }
+
+  public async deleteApplicant(post_id: number, email: string): Promise<void> {
+    const applicantRecord = await this.applicantRepository.findOne({
+      post_id,
+    });
+    if (!applicantRecord) throw ApplicantNotFoundException;
+    const userRecord = await this.userRepository.findUserByEmail(
+      this.req.user.email,
+    );
+    const applicantUserRecord = await this.userRepository.findUserByEmail(
+      email,
+    );
+    if (!userRecord || !applicantUserRecord) throw UserNotFoundException;
+
+    const postRecord = await this.postRepository.findOne({
+      id: post_id,
+      user: userRecord.id,
+    });
+    if (!postRecord) throw PostNotFoundException;
+    await this.applicantRepository.delete({
+      post_id: post_id,
+      user_id: applicantUserRecord.id,
+    });
   }
 }
