@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApplicantService } from './applicant.service';
 import { DeleteApplicantDto } from './dto/delete-applicant.dto';
 import { GetApplicantResponseData } from './dto/get-applicant.dto';
+import { UpdateApplicantDto } from './dto/update-applicant.dto';
 import { Applicant } from './entity/applicant.entity';
 
 @Controller('applicant')
@@ -44,6 +46,16 @@ export class ApplicantController {
     @Body() dto: DeleteApplicantDto,
   ): Promise<{ message: string }> {
     await this.applicantService.deleteApplicant(post_id, dto.user_email);
+    return { message: 'success' };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':post_id')
+  public async acceptApplicant(
+    @Param('post_id') post_id: number,
+    @Body() dto: UpdateApplicantDto,
+  ): Promise<{ message: string }> {
+    await this.applicantService.acceptApplicant(post_id, dto.user_email);
     return { message: 'success' };
   }
 }
