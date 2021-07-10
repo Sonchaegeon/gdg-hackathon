@@ -22,3 +22,6 @@ export const ApplicantForbiddenException = new ForbiddenException(
 // 404
 export const UserNotFoundException = new NotFoundException('User Not Found');
 export const GiftNotFoundException = new NotFoundException('Gift Not Found');
+export const ApplicantNotFoundException = new NotFoundException(
+  'Applicant Not Found',
+);
