@@ -1,6 +1,13 @@
 import { Post } from '../../post/entity/post.entity';
 import { User } from '../../shared/entity/user/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity('applicant')
 export class Applicant {
