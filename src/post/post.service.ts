@@ -14,6 +14,8 @@ import {
 import { IUserRequest } from '../shared/interface/request.interface';
 import { CreatePostDto, CreatePostResponseData } from './dto/create-post.dto';
 import { GetPostsResponseData } from './dto/get-posts.dto';
+import { PostView } from './entity/post-view.entity';
+import { PostViewRepository } from './entity/post-view.repository';
 import { Post } from './entity/post.entity';
 import { PostRepository } from './entity/post.repository';
 
@@ -23,6 +25,8 @@ export class PostService {
     @InjectRepository(Post) private readonly postRepository: PostRepository,
     @InjectRepository(User) private readonly userRepository: UserRepository,
     @InjectRepository(Gift) private readonly giftRepository: GiftRepository,
+    @InjectRepository(PostView)
+    private readonly postViewRepository: PostViewRepository,
     @Inject(REQUEST) private readonly req: IUserRequest,
   ) {}
 
@@ -40,6 +44,6 @@ export class PostService {
 
   public getPosts(page: number, size: number): Promise<GetPostsResponseData[]> {
     if (page <= 0 || size <= 0) throw QueryInputException;
-    return this.postRepository.getPosts(page, size);
+    return this.postViewRepository.getPosts(page, size);
   }
 }
