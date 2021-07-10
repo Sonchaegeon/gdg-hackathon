@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EventsGateway } from './events.gateway';
+import { EventsGateway } from './events/events.gateway';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmConfigModule } from './typeorm/typeorm-config.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -8,8 +8,7 @@ import { HttpErrorFilter } from './shared/exception/exception.filter';
 import { PostModule } from './post/post.module';
 import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
 import { ApplicantModule } from './applicant/applicant.module';
-import { AuthService } from './auth/auth.service';
-import { UserRepository } from './shared/entity/user/user.repository';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -18,12 +17,10 @@ import { UserRepository } from './shared/entity/user/user.repository';
     JwtModule.register({}),
     PostModule,
     ApplicantModule,
+    EventsModule,
   ],
   providers: [
-    EventsGateway,
     JwtStrategy,
-    AuthService,
-    UserRepository,
     {
       provide: APP_FILTER,
       useClass: HttpErrorFilter,

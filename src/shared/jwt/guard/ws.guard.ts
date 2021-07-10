@@ -16,12 +16,12 @@ export class WsJwtGuard implements CanActivate {
     try {
       const client: Socket = context.switchToWs().getClient<Socket>();
       const token: string = client.handshake.query.token as string;
-      this.logger.log(token);
       const user = await this.authService.verifyUser(token);
       context.switchToHttp().getRequest().user = user;
 
       return Boolean(user);
     } catch (err) {
+      this.logger.error(err.message);
       throw new WsException(err.message);
     }
   }
