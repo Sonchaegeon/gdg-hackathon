@@ -9,6 +9,9 @@ import {
 export const ExistUserException = new BadRequestException('Exist User Error');
 export const ExistPostException = new BadRequestException('Exist Post Error');
 export const QueryInputException = new BadRequestException('Query Input Error');
+export const AlreadyAcceptException = new BadRequestException(
+  'Already Accepted',
+);
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException();
