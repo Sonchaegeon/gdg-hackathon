@@ -7,6 +7,7 @@ import { UserRepository } from '../shared/entity/user/user.repository';
 import { Applicant } from './entity/applicant.entity';
 import { ApplicantRepository } from './entity/applicant.repository';
 import {
+  AlreadyAcceptException,
   ApplicantForbiddenException,
   ApplicantNotFoundException,
   PostNotFoundException,
@@ -62,10 +63,9 @@ export class ApplicantService {
   }
 
   public async deleteApplicant(post_id: number, email: string): Promise<void> {
-    const applicantRecord = await this.applicantRepository.findOne({
-      post_id,
-    });
+    const applicantRecord = await this.applicantRepository.findOne({ post_id });
     if (!applicantRecord) throw ApplicantNotFoundException;
+
     const userRecord = await this.userRepository.findUserByEmail(
       this.req.user.email,
     );
@@ -79,9 +79,35 @@ export class ApplicantService {
       user: userRecord.id,
     });
     if (!postRecord) throw PostNotFoundException;
+
     await this.applicantRepository.delete({
       post_id: post_id,
       user_id: applicantUserRecord.id,
     });
+  }
+
+  public async acceptApplicant(post_id: number, email: string): Promise<void> {
+    const userRecord = await this.userRepository.findUserByEmail(
+      this.req.user.email,
+    );
+    const applicantUserRecord = await this.userRepository.findUserByEmail(
+      email,
+    );
+    if (!userRecord || !applicantUserRecord) throw UserNotFoundException;
+
+    const postRecord = await this.postRepository.findOne({
+      id: post_id,
+      user: userRecord.id,
+    });
+    if (!postRecord) throw PostNotFoundException;
+
+    const applicantRecord = await this.applicantRepository.findOne({
+      post_id,
+      user_id: applicantUserRecord.id,
+    });
+    if (!applicantRecord) throw ApplicantNotFoundException;
+    if (applicantRecord.is_accept === 1) throw AlreadyAcceptException;
+
+    await this.applicantRepository.update(applicantRecord, { is_accept: 1 });
   }
 }
